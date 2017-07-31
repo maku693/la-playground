@@ -100,4 +100,13 @@ inline constexpr std::enable_if_t<Dim> 3, float&> w(const vec<Dim>& v) noexcept
     return v[3];
 }
 
+// template <std::size_t Dim>
+// inline constexpr float dot(const vec<Dim>& lhs, const vec<Dim>& rhs)
+// {
+// }
+// cross
+// mag
+// sqrt_mag
+// normalize
+
 } // namespace linmath
