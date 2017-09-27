@@ -31,15 +31,13 @@ struct vec {
   }
 
   template <class T>
-  constexpr std::enable_if_t<std::is_scalar<T>::value, vec<Dim>&> operator*=(
-      T rhs) noexcept {
+  constexpr vec<Dim>& operator*=(T rhs) noexcept {
     elements *= rhs.elements;
     return *this;
   }
 
   template <class T>
-  constexpr std::enable_if_t<std::is_scalar<T>::value, vec<Dim>&> operator/=(
-      T rhs) noexcept {
+  constexpr vec<Dim>& operator/=(T rhs) noexcept {
     return *this *= (1 / rhs);
   }
 
@@ -52,14 +50,12 @@ struct vec {
   }
 
   template <class T>
-  constexpr std::enable_if_t<std::is_scalar<T>::value, vec<Dim>&> operator*(
-      T rhs) noexcept {
+  constexpr vec<Dim> operator*(T rhs) noexcept {
     return vec<Dim>(*this) *= rhs;
   }
 
   template <class T>
-  constexpr std::enable_if_t<std::is_scalar<T>::value, vec<Dim>&> operator/(
-      T rhs) noexcept {
+  constexpr vec<Dim> operator/(T rhs) noexcept {
     return vec<Dim>(*this) /= rhs;
   }
 };
