@@ -65,26 +65,26 @@ using vec3 = typename vec<3>;
 using vec4 = typename vec<4>;
 
 template <std::size_t Dim>
-inline constexpr std::enable_if_t<Dim> 0,
-    float& > x(const vec<Dim>& v) noexcept {
+inline constexpr std::enable_if_t<(Dim > 0), float&> x(
+    const vec<Dim>& v) noexcept {
   return v[0];
 }
 
 template <std::size_t Dim>
-inline constexpr std::enable_if_t<Dim> 1,
-    float& > y(const vec<Dim>& v) noexcept {
+inline constexpr std::enable_if_t<(Dim > 1), float&> y(
+    const vec<Dim>& v) noexcept {
   return v[1];
 }
 
 template <std::size_t Dim>
-inline constexpr std::enable_if_t<Dim> 2,
-    float& > z(const vec<Dim>& v) noexcept {
+inline constexpr std::enable_if_t<(Dim > 2), float&> z(
+    const vec<Dim>& v) noexcept {
   return v[2];
 }
 
 template <std::size_t Dim>
-inline constexpr std::enable_if_t<Dim> 3,
-    float& > w(const vec<Dim>& v) noexcept {
+inline constexpr std::enable_if_t<(Dim > 3), float&> w(
+    const vec<Dim>& v) noexcept {
   return v[3];
 }
 
