@@ -100,6 +100,26 @@ struct vec2 : public vec_base<vec2> {
 
     constexpr vec2(float x, float y) noexcept : x(x), y(y) {}
 
+    constexpr const float& operator[](std::ptrdiff_t i) const
+    {
+        switch(i % 2) {
+            case 0:
+            return x;
+            case 1:
+            return y;
+        }
+    }
+
+    constexpr float& operator[](std::ptrdiff_t i)
+    {
+        switch(i % 2) {
+            case 0:
+            return x;
+            case 1:
+            return y;
+        }
+    }
+
     constexpr vec2& operator+=(const vec2& rhs) noexcept
     {
         x += rhs.x;
@@ -135,6 +155,30 @@ struct vec3 : public vec_base<vec3> {
     constexpr explicit vec3(float v) noexcept : x(v), y(v), z(z) {}
 
     constexpr vec3(float x, float y, float z) noexcept : x(x), y(y), z(z) {}
+
+    constexpr const float& operator[](std::ptrdiff_t i) const
+    {
+        switch(i % 3) {
+            case 0:
+            return x;
+            case 1:
+            return y;
+            case 2:
+            return z;
+        }
+    }
+
+    constexpr float& operator[](std::ptrdiff_t i)
+    {
+        switch(i % 3) {
+            case 0:
+            return x;
+            case 1:
+            return y;
+            case 2:
+            return z;
+        }
+    }
 
     constexpr vec3& operator+=(const vec3& rhs) noexcept
     {
@@ -194,6 +238,35 @@ struct vec4 : public vec_base<vec4> {
 
     constexpr vec4(float x, float y, float z, float w) noexcept
         : x(x), y(y), z(z), w(w) {}
+
+
+    constexpr const float& operator[](std::ptrdiff_t i) const
+    {
+        switch(i % 3) {
+            case 0:
+            return x;
+            case 1:
+            return y;
+            case 2:
+            return z;
+            case 3:
+            return w;
+        }
+    }
+
+    constexpr float& operator[](std::ptrdiff_t i)
+    {
+        switch(i % 3) {
+            case 0:
+            return x;
+            case 1:
+            return y;
+            case 2:
+            return z;
+            case 3:
+            return w;
+        }
+    }
 
     constexpr vec4& operator+=(const vec4& rhs) noexcept
     {
