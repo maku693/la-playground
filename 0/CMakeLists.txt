@@ -13,3 +13,7 @@ target_include_directories(${PROJECT_NAME} PRIVATE
 
 file(GLOB_RECURSE TEST_SOURCE_FILES "tests/*.cpp")
 add_executable("tests" ${TEST_SOURCE_FILES})
+
+set_target_properties(${PROJECT_NAME}
+  PROPERTIES
+  CXX_CLANG_TIDY "clang-tidy")
