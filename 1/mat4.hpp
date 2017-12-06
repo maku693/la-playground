@@ -5,41 +5,14 @@
 
 class mat4 {
 public:
-    class mat4::row {
-    public:
-        constexpr row() noexcept = default;
-
-        constexpr row(float v1, float v2, float v3, float v4) noexcept
-            : m_values{v1, v2, v3, v4}
-        {}
-
-        constexpr const float& operator[](std::ptrdiff_t i) const
-        {
-            return m_values[i];
-        }
-
-        constexpr float& operator[](std::ptrdiff_t i)
-        {
-            return m_values[i];
-        }
-
-        constexpr operator vec4() const noexcept
-        {
-            return { m_values[0], m_values[1], m_values[2], m_values[3] };
-        }
-
-    private:
-        std::array<float, 4> m_values{};
-    };
-
     constexpr mat4() noexcept = default;
 
     explicit constexpr mat4(float x) noexcept
         : m_rows{
-            row{x,    0.0f, 0.0f, 0.0f},
-            row{0.0f, x,    0.0f, 0.0f},
-            row{0.0f, 0.0f, x,    0.0f},
-            row{0.0f, 0.0f, 0.0f, x   },
+            vec4{x,    0.0f, 0.0f, 0.0f},
+            vec4{0.0f, x,    0.0f, 0.0f},
+            vec4{0.0f, 0.0f, x,    0.0f},
+            vec4{0.0f, 0.0f, 0.0f, x   },
         }
     {}
 
@@ -48,19 +21,19 @@ public:
         float m20, float m21, float m22, float m23,
         float m30, float m31, float m32, float m33) noexcept
         : m_rows{
-            row{m00, m01, m02, m03},
-            row{m10, m11, m12, m13},
-            row{m20, m21, m22, m23},
-            row{m30, m31, m32, m33},
+            vec4{m00, m01, m02, m03},
+            vec4{m10, m11, m12, m13},
+            vec4{m20, m21, m22, m23},
+            vec4{m30, m31, m32, m33},
         }
     {}
 
-    constexpr const row& operator[](std::ptrdiff_t i) const
+    constexpr const vec4& operator[](std::ptrdiff_t i) const
     {
         return m_rows[i];
     }
 
-    constexpr row& operator[](std::ptrdiff_t i)
+    constexpr vec4& operator[](std::ptrdiff_t i)
     {
         return m_rows[i];
     }
@@ -119,7 +92,7 @@ public:
     }
 
 private:
-    std::array<row, 4> m_rows{};
+    std::array<vec4, 4> m_rows{};
 };
 
 // constexpr mat4 make_identity() noexcept
