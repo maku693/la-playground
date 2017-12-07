@@ -3,91 +3,89 @@
 
 template <class Vec>
 struct vec_operators {
-    constexpr Vec operator+() const noexcept
+    friend constexpr Vec operator+(const Vec& v) noexcept
     {
-        return *this;
+        return v;
     }
 
-    constexpr Vec operator-() const noexcept
+    friend constexpr Vec operator-(const Vec& v) noexcept
     {
-        return *this * -1.0f;
+        return v * -1.0f;
     }
 
-    constexpr Vec& operator-=(const Vec& rhs) noexcept
+    friend constexpr Vec& operator-=(Vec& lhs, const Vec& rhs) noexcept
     {
-        return *this += -rhs;
+        return lhs += -rhs;
     }
 
-    constexpr Vec& operator/=(const float rhs) noexcept
+    friend constexpr Vec& operator/=(Vec& lhs, const float& rhs) noexcept
     {
-        return *this * (1.0f / rhs);
+        return lhs * (1.0f / rhs);
     }
 
-    constexpr Vec operator+(const Vec& rhs) const noexcept
+    friend constexpr Vec operator+(const Vec& lhs, const Vec& rhs) noexcept
     {
-        return Vec(*this) += rhs;
+        Vec lhs_copy{lhs};
+        return lhs_copy += rhs;
     }
 
-    constexpr Vec operator-(const Vec& rhs) const noexcept
+    friend constexpr Vec operator-(const Vec& lhs, const Vec& rhs) noexcept
     {
-        return Vec(*this) -= rhs;
+        Vec lhs_copy{lhs};
+        return lhs_copy -= rhs;
     }
 
-    constexpr Vec operator*(const float rhs) const noexcept
+    friend constexpr Vec operator*(const Vec& lhs, const float& rhs) noexcept
     {
-        return Vec(*this) *= rhs;
+        Vec lhs_copy{lhs};
+        return lhs_copy *= rhs;
     }
 
-    constexpr Vec operator/(const float rhs) const noexcept
+    friend constexpr Vec operator*(const float lhs, const Vec& rhs) noexcept
     {
-        return Vec(*this) /= rhs;
+        return rhs * lhs;
     }
 
-    constexpr bool operator!=(const Vec& rhs) const noexcept
+    friend constexpr Vec operator/(const Vec& lhs, const float& rhs) noexcept
     {
-        return !(*this == rhs);
+        Vec lhs_copy{lhs};
+        return lhs_copy /= rhs;
+    }
+
+    friend constexpr bool operator!=(const Vec& lhs, const Vec& rhs) noexcept
+    {
+        return !(lhs == rhs);
+    }
+
+    friend constexpr Vec lerp(const Vec& a, const Vec& b, const float& t)
+    {
+        return a + t * (b - a);
     }
 };
 
 template <class Vec>
-struct vec_base : private vec_operators {
+struct vec_base : private vec_operators<Vec> {
     constexpr float squared_length() const noexcept
     {
-        return dot(*this, *this);
+        const Vec& v = *static_cast<const Vec*>(this);
+        return dot(v, v);
     }
 
     float length() const noexcept
     {
-        return std::sqrt(squared_length());
+        return std::sqrt(static_cast<const Vec*>(this)->squared_length());
     }
 
     Vec normalized() const noexcept
     {
-        return *this / length();
+        return *static_cast<const Vec*>(this) / length();
     }
 };
-
-template <class T>
-struct is_vec : public std::is_base_of<vec_operators, T> {};
-
-template <class T>
-constexpr std::enable_if_t<is_vec<T>::value, T>
-operator*(float lhs, const typename T& rhs) noexcept
-{
-    return rhs * lhs;
-}
 
 template <class T>
 float distance(const T& lhs, const T& rhs)
 {
     return (lhs - rhs).length();
-}
-
-template <class T>
-constexpr std::enable_if_t<is_vec<T>::value, T>
-lerp(const T& a, const T& b, float t)
-{
-    return a + t * (b - a);
 }
 
 struct vec2 : public vec_base<vec2> {
@@ -102,22 +100,12 @@ struct vec2 : public vec_base<vec2> {
 
     constexpr const float& operator[](std::ptrdiff_t i) const
     {
-        switch(i % 2) {
-            case 0:
-            return x;
-            case 1:
-            return y;
-        }
+        return (&x)[i];
     }
 
     constexpr float& operator[](std::ptrdiff_t i)
     {
-        switch(i % 2) {
-            case 0:
-            return x;
-            case 1:
-            return y;
-        }
+        return (&x)[i];
     }
 
     constexpr vec2& operator+=(const vec2& rhs) noexcept
@@ -152,32 +140,18 @@ struct vec3 : public vec_base<vec3> {
 
     constexpr vec3() noexcept = default;
 
-    constexpr explicit vec3(float v) noexcept : x(v), y(v), z(z) {}
+    constexpr explicit vec3(float v) noexcept : x(v), y(v), z(v) {}
 
     constexpr vec3(float x, float y, float z) noexcept : x(x), y(y), z(z) {}
 
     constexpr const float& operator[](std::ptrdiff_t i) const
     {
-        switch(i % 3) {
-            case 0:
-            return x;
-            case 1:
-            return y;
-            case 2:
-            return z;
-        }
+        return (&x)[i];
     }
 
     constexpr float& operator[](std::ptrdiff_t i)
     {
-        switch(i % 3) {
-            case 0:
-            return x;
-            case 1:
-            return y;
-            case 2:
-            return z;
-        }
+        return (&x)[i];
     }
 
     constexpr vec3& operator+=(const vec3& rhs) noexcept
@@ -234,38 +208,19 @@ struct vec4 : public vec_base<vec4> {
 
     constexpr vec4() noexcept = default;
 
-    constexpr explicit vec4(float v) noexcept : x(v), y(v), z(z), w(w) {}
+    constexpr explicit vec4(float v) noexcept : x(v), y(v), z(v), w(v) {}
 
     constexpr vec4(float x, float y, float z, float w) noexcept
         : x(x), y(y), z(z), w(w) {}
 
-
     constexpr const float& operator[](std::ptrdiff_t i) const
     {
-        switch(i % 3) {
-            case 0:
-            return x;
-            case 1:
-            return y;
-            case 2:
-            return z;
-            case 3:
-            return w;
-        }
+        return (&x)[i];
     }
 
     constexpr float& operator[](std::ptrdiff_t i)
     {
-        switch(i % 3) {
-            case 0:
-            return x;
-            case 1:
-            return y;
-            case 2:
-            return z;
-            case 3:
-            return w;
-        }
+        return (&x)[i];
     }
 
     constexpr vec4& operator+=(const vec4& rhs) noexcept
